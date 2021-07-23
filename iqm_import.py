@@ -17,6 +17,7 @@ from bpy.props import *
 from bpy_extras.io_utils import ImportHelper, unpack_list
 from bpy_extras.image_utils import load_image
 from mathutils import Matrix, Quaternion, Vector
+from pathlib import Path
 
 # see blenkernel/intern/armature.c for vec_roll_to_mat3
 # see blenkernel/intern/armature.c for mat3_to_vec_roll
@@ -562,7 +563,13 @@ def make_material(iqmaterial, dir):
 
 	if not texname in images:
 		print("load image", texname)
-		images[texname] = load_image("textures/" + texname + ".png", dir, place_holder=True, recursive=True)
+		jpg=Path(dir+"/"+texname+".jpg" )
+		png=Path(dir+"/"+texname+".png" )
+		if jpg.exists():
+			images[texname]=bpy.data.images.load(str(jpg))
+		if png.exists():
+			images[texname]=bpy.data.images.load(str(png))
+		#images[texname] = load_image("textures/" + texname + ".jpg", dir, place_holder=True, recursive=True)
 	image = images[texname]
 
 	if texname in bpy.data.textures:
